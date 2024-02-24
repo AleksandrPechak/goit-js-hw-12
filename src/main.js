@@ -23,18 +23,18 @@ async function searchImages(e) {
   galleryList.innerHTML = '';
   pixabay.currentPage = 1;
   pixabay.query = queryToSearch.value;
-  htmlElementVisible(loadMoreButton, false);
+  toggleElementVisibility(loadMoreButton, false);
   if (isValidQuery(pixabay.query)) {
     queryToSearch.value = '';
-    htmlElementVisible(loader, true);
+    toggleElementVisibility(loader, true);
     const imageList = await pixabay.getImageList();
-    htmlElementVisible(loader, false);
+    toggleElementVisibility(loader, false);
     if (imageList.length > 0) {
       const htmlImageList = getHtmlImageList(imageList);
       renderGallery(htmlImageList, galleryList);
       gallery.refresh();
       if (pixabay.totalPages > 1) {
-        htmlElementVisible(loadMoreButton, true);
+        toggleElementVisibility(loadMoreButton, true);
       }
     } else {
       iziToast.info({
@@ -58,10 +58,10 @@ async function searchImages(e) {
 async function loadMoreImages(e) {
   e.preventDefault();
   pixabay.currentPage += 1;
-  htmlElementVisible(loader, true);
-  htmlElementVisible(loadMoreButton, false);
+  toggleElementVisibility(loader, true);
+  toggleElementVisibility(loadMoreButton, false);
   const imageList = await pixabay.getImageList();
-  htmlElementVisible(loader, false);
+  toggleElementVisibility(loader, false);
   const htmlImageList = getHtmlImageList(imageList);
   renderGallery(htmlImageList, galleryList);
   gallery.refresh();
@@ -71,7 +71,7 @@ async function loadMoreImages(e) {
     behavior: 'smooth',
   });
   if (pixabay.totalPages === pixabay.currentPage) {
-    htmlElementVisible(loadMoreButton, false);
+    toggleElementVisibility(loadMoreButton, false);
     iziToast.info({
       message: `We're sorry, but you've reached the end of search results.`,
       progressBar: false,
@@ -79,7 +79,7 @@ async function loadMoreImages(e) {
       position: 'topRight',
     });
   } else {
-    htmlElementVisible(loadMoreButton, true);
+    toggleElementVisibility(loadMoreButton, true);
   }
 }
 
@@ -91,7 +91,7 @@ function isValidQuery(queryToSearch) {
   }
 }
 
-function htmlElementVisible(element, isVisible = false) {
+function toggleElementVisibility(element, isVisible = false) {
   if (isVisible) {
     element.classList.remove('hidden');
   } else {
